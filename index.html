@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#04070e">
+<title>Warframe Live Updates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04070e;--panel:#0b1420;--panel2:#0f1d2d;--line:#22384c;
+  --teal:#53e5e8;--teal-dim:#2a9a9c;--amber:#f1c66d;--amber-bright:#ffd700;
+  --green:#65e6ad;--muted:#93aac2;--txt:#eef6ff;
+  --accent:#53e5e8;--accent-bright:#86f9fc;--accent-dim:#1b6268;
+  --gold:#f1c66d;--gold-bright:#ffd966;
+  --crimson:#ff4769;--crimson-bright:#ff6b86;
+  --steel:#ff4d6d;
+  --storm:#5da9ff;
+  --violet:#d79eff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Rajdhani','Segoe UI',Arial,sans-serif}
+
+/* ===== ANIMATED DEEP SPACE + VOID / OROKIN BACKGROUND ===== */
+body{
+  position:relative;
+  background:
+    radial-gradient(ellipse at 50% -18%, rgba(45,112,145,.34) 0, transparent 52%),
+    radial-gradient(circle at 12% 85%, rgba(83,229,232,.09) 0, transparent 38%),
+    radial-gradient(circle at 88% 82%, rgba(215,158,255,.08) 0, transparent 38%),
+    linear-gradient(145deg, #040812 0%, #02050b 60%, #060a16 100%);
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(83,229,232,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83,229,232,.03) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse at 50% 45%, black 35%, transparent 90%);
+  animation:voidGridDrift 30s linear infinite;
+}
+body::after{
+  content:"";position:fixed;inset:-15%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(83,229,232,.06), transparent 34%),
+    radial-gradient(circle at 74% 64%, rgba(255,215,0,.05), transparent 36%),
+    radial-gradient(circle at 50% 50%, rgba(120,75,210,.06), transparent 44%);
+  animation:voidAura 18s ease-in-out infinite alternate;
+}
+.space-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 18%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 22% 62%, rgba(134,249,252,.6), transparent),
+    radial-gradient(1.5px 1.5px at 38% 28%, rgba(255,255,255,.65), transparent),
+    radial-gradient(1px 1px at 54% 76%, rgba(255,224,140,.55), transparent),
+    radial-gradient(1.5px 1.5px at 70% 22%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 86% 68%, rgba(215,158,255,.6), transparent),
+    radial-gradient(1.5px 1.5px at 94% 38%, rgba(255,255,255,.65), transparent);
+  background-size:360px 260px;
+  animation:bgSpaceDrift 48s linear infinite, bgSpaceTwinkle 6s ease-in-out infinite;
+}
+@keyframes voidGridDrift{0%{background-position:0 0, 0 0}100%{background-position:44px 44px, 44px 44px}}
+@keyframes voidAura{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,2%,0) scale(1.06)}}
+@keyframes bgSpaceDrift{0%{background-position:0 0}100%{background-position:-360px -260px}}
+@keyframes bgSpaceTwinkle{0%,100%{opacity:.45}50%{opacity:.85}}
+
+.screen{position:relative;z-index:1;width:100vw;height:100vh;padding:11px 18px 10px;display:flex;flex-direction:column;gap:7px}
+
+/* ===== HEADER ===== */
+header{
+  height:54px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-bottom:7px;position:relative;
+  border-bottom:1px solid rgba(83,229,232,.24);
+}
+header::after{
+  content:"";position:absolute;left:0;bottom:-1px;width:220px;height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold-bright), var(--accent-bright), transparent);
+  box-shadow:0 0 12px rgba(83,229,232,.75);
+  animation:headerBeam 5.5s ease-in-out infinite;
+}
+@keyframes headerBeam{
+  0%{left:0;opacity:.35}
+  50%{left:calc(100% - 220px);opacity:1}
+  100%{left:0;opacity:.35}
+}
+
+.brand{display:flex;align-items:center;gap:12px}
+.orokin-crest{width:28px;height:28px;flex:none;display:grid;place-items:center;position:relative}
+.orokin-crest::before,.orokin-crest::after{
+  content:"";position:absolute;inset:2px;border:1.5px solid var(--gold-bright);
+  transform:rotate(45deg);border-radius:3px;
+  box-shadow:0 0 10px rgba(255,215,0,.45);
+  animation:crestSpin 12s linear infinite;
+}
+.orokin-crest::after{
+  inset:7px;border-color:var(--accent-bright);
+  box-shadow:0 0 10px rgba(83,229,232,.6);
+  animation:crestSpinRev 8s linear infinite;
+}
+@keyframes crestSpin{0%{transform:rotate(45deg)}100%{transform:rotate(405deg)}}
+@keyframes crestSpinRev{0%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
+
+h1{margin:0;line-height:1;display:flex;align-items:center;gap:12px}
+h1 .wf{
+  font-family:'Cinzel',Georgia,serif;
+  font-size:30px;font-weight:900;letter-spacing:5px;
+  background:linear-gradient(110deg, #b8892a 0%, #fff2b2 28%, #ffd700 48%, #86f9fc 66%, #ffd700 84%, #b8892a 100%);
+  background-size:240% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(255,215,0,.32));
+  animation:orokinSweep 5s ease-in-out infinite;
+}
+h1 .sep{font-size:15px;color:var(--accent-bright);text-shadow:0 0 10px var(--accent-bright);animation:sepPulse 2.4s ease-in-out infinite}
+h1 em{
+  font-family:'Orbitron','Segoe UI',sans-serif;
+  font-style:normal;font-size:19px;font-weight:900;letter-spacing:4px;
+  background:linear-gradient(90deg, var(--accent-bright), #ffffff, var(--crimson-bright), var(--accent-bright));
+  background-size:220% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 10px rgba(83,229,232,.35));
+  animation:liveHolo 4.2s linear infinite;
+}
+@keyframes orokinSweep{
+  0%{background-position:0% center;letter-spacing:5px}
+  50%{background-position:120% center;letter-spacing:5.8px}
+  100%{background-position:240% center;letter-spacing:5px}
+}
+@keyframes sepPulse{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.18)}}
+@keyframes liveHolo{0%{background-position:0% center}100%{background-position:220% center}}
+
+.headright{text-align:right;min-width:190px}
+.live{font-family:'Orbitron',sans-serif;color:var(--green);font-size:12px;letter-spacing:2.2px;font-weight:700}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:8px;box-shadow:0 0 10px var(--green);animation:liveDot 1.8s ease-in-out infinite}
+@keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.headmeta{font-size:13px;color:var(--muted);margin-top:3px;letter-spacing:1.2px;font-weight:700}
+#warning{color:var(--gold-bright);font-size:10.5px;letter-spacing:1px;min-height:13px;font-weight:700}
+
+/* ===== TOP COMMAND STRIP: DARVO · PRIME RESURGENCE · ARCHON HUNT · EVENTS · BUILD ===== */
+.top-cards{
+  display:grid;
+  grid-template-columns:1.1fr 1.2fr 1.2fr 1fr 0.72fr;
+  gap:8px;
+  flex:none;
+}
+.top-card{
+  background:
+    radial-gradient(circle at 95% 20%, rgba(83,229,232,.09), transparent 50%),
+    linear-gradient(145deg, rgba(16,33,46,.95), rgba(8,16,26,.98));
+  border:1px solid rgba(83,229,232,.25);
+  border-radius:9px;
+  padding:6px 11px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:48px;
+  position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(134,249,252,.12), 0 4px 14px rgba(0,0,0,.42);
+  transition:border-color .28s, box-shadow .28s, transform .22s;
+}
+.top-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg, var(--accent-bright), var(--accent-dim));
+  box-shadow:0 0 10px rgba(83,229,232,.55);
+}
+.top-card.darvo-card::before{background:linear-gradient(180deg, var(--gold-bright), #a67418);box-shadow:0 0 10px rgba(255,215,0,.55)}
+.top-card.resurgence-card{
+  background:
+    radial-gradient(circle at 95% 20%, rgba(215,158,255,.14), transparent 52%),
+    linear-gradient(145deg, rgba(25,18,44,.95), rgba(11,8,22,.98));
+  border-color:rgba(215,158,255,.32);
+}
+.top-card.resurgence-card::before{background:linear-gradient(180deg, #d79eff, #6f3bb8);box-shadow:0 0 10px rgba(215,158,255,.6)}
+.top-card.archon-card{
+  background:
+    radial-gradient(circle at 95% 20%, rgba(255,107,107,.12), transparent 52%),
+    linear-gradient(145deg, rgba(34,17,22,.95), rgba(15,8,12,.98));
+  border-color:rgba(255,107,107,.3);
+}
+.top-card.archon-card::before{background:linear-gradient(180deg, #ff7b54, #9c1b30);box-shadow:0 0 10px rgba(255,123,84,.6)}
+.top-card.events-card::before{background:linear-gradient(180deg, var(--crimson-bright), #8b1e36);box-shadow:0 0 10px rgba(255,77,109,.55)}
+.top-card:hover{transform:translateY(-1px);border-color:rgba(83,229,232,.55);box-shadow:inset 0 1px 0 rgba(134,249,252,.18), 0 0 20px rgba(83,229,232,.18)}
+
+.tc-meta{display:flex;flex-direction:column;gap:2px;min-width:0;padding-left:5px;flex:1}
+.tc-label{font-family:'Orbitron',sans-serif;font-size:9.5px;letter-spacing:1.3px;color:var(--muted);font-weight:700;white-space:nowrap}
+.darvo-card .tc-label{color:var(--gold-bright)}
+.resurgence-card .tc-label{color:#dfb4ff}
+.archon-card .tc-label{color:#ff9473}
+.events-card .tc-label{color:var(--crimson-bright)}
+.tc-main{font-size:14.5px;font-weight:700;color:var(--txt);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-sub{font-size:11.5px;color:var(--muted);line-height:1.2;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.tc-pill{
+  flex-shrink:0;font-family:'Orbitron',sans-serif;font-size:10.5px;font-weight:700;
+  padding:3px 8px;border-radius:6px;letter-spacing:.5px;font-variant-numeric:tabular-nums;
+  background:rgba(83,229,232,.12);color:var(--accent-bright);border:1px solid rgba(83,229,232,.3);
+}
+.darvo-card .tc-pill{background:rgba(255,215,0,.14);color:var(--gold-bright);border-color:rgba(255,215,0,.38)}
+.resurgence-card .tc-pill{background:rgba(215,158,255,.16);color:#e6c6ff;border-color:rgba(215,158,255,.42)}
+.archon-card .tc-pill{background:rgba(255,123,84,.16);color:#ffad94;border-color:rgba(255,123,84,.4)}
+.events-card .tc-pill{background:rgba(255,77,109,.14);color:var(--crimson-bright);border-color:rgba(255,77,109,.36)}
+.build-card .tc-main{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--accent-bright);text-shadow:0 0 10px rgba(83,229,232,.35)}
+
+/* ===== BARO STRIP — ANIMATED DEEP SPACE + SYNCED ROCKET + PLANET STAGE ===== */
+.baro-strip{
+  flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border:1px solid rgba(110,185,255,.32);border-radius:10px;padding:4px 18px;
+  background:
+    radial-gradient(ellipse at 25% 50%, rgba(42,72,145,.38), transparent 55%),
+    radial-gradient(ellipse at 75% 45%, rgba(112,48,160,.28), transparent 55%),
+    linear-gradient(135deg,#040714 0%, #091026 50%, #0d081d 100%);
+  border-left:3px solid var(--gold-bright);
+  position:relative;overflow:hidden;min-height:58px;
+  box-shadow:0 4px 16px rgba(0,0,0,.55), inset 0 1px 0 rgba(140,210,255,.14), 0 0 22px rgba(45,90,180,.15);
+}
+.baro-nebula{
+  position:absolute;inset:-20%;
+  background:
+    radial-gradient(circle at 20% 40%, rgba(83,229,232,.14), transparent 36%),
+    radial-gradient(circle at 52% 60%, rgba(255,215,0,.12), transparent 32%),
+    radial-gradient(circle at 80% 35%, rgba(155,89,255,.16), transparent 38%);
+  filter:blur(10px);z-index:0;
+  animation:nebulaDrift 18s ease-in-out infinite alternate;
+}
+@keyframes nebulaDrift{
+  0%{transform:translate3d(-3%, -2%, 0) scale(1)}
+  50%{transform:translate3d(3%, 2%, 0) scale(1.06)}
+  100%{transform:translate3d(-2%, 3%, 0) scale(1.02)}
+}
+.baro-stars, .baro-stars2{position:absolute;inset:0;pointer-events:none;z-index:1}
+.baro-stars{
+  background-image:
+    radial-gradient(1.5px 1.5px at 6% 24%, rgba(255,255,255,.95), transparent),
+    radial-gradient(1px 1px at 14% 74%, rgba(174,235,255,.8), transparent),
+    radial-gradient(1.5px 1.5px at 24% 38%, rgba(255,255,255,.85), transparent),
+    radial-gradient(1px 1px at 36% 80%, rgba(255,232,168,.8), transparent),
+    radial-gradient(1.5px 1.5px at 47% 22%, rgba(255,255,255,.9), transparent),
+    radial-gradient(1px 1px at 59% 68%, rgba(174,235,255,.85), transparent),
+    radial-gradient(1.5px 1.5px at 72% 30%, rgba(255,255,255,.9), transparent),
+    radial-gradient(1px 1px at 84% 76%, rgba(255,232,168,.75), transparent),
+    radial-gradient(1.5px 1.5px at 94% 28%, rgba(255,255,255,.95), transparent);
+  background-size:320px 64px;
+  animation:starDriftFast 14s linear infinite, starTwinkle 3.5s ease-in-out infinite;
+}
+.baro-stars2{
+  background-image:
+    radial-gradient(2px 2px at 10% 52%, rgba(255,215,0,.7), transparent),
+    radial-gradient(1.5px 1.5px at 29% 18%, rgba(122,245,248,.75), transparent),
+    radial-gradient(2px 2px at 53% 46%, rgba(255,255,255,.65), transparent),
+    radial-gradient(1.5px 1.5px at 78% 58%, rgba(122,245,248,.7), transparent),
+    radial-gradient(2px 2px at 91% 50%, rgba(255,215,0,.65), transparent);
+  background-size:440px 64px;
+  animation:starDriftSlow 26s linear infinite;
+}
+@keyframes starDriftFast{0%{background-position:0 0}100%{background-position:-320px 0}}
+@keyframes starDriftSlow{0%{background-position:0 0}100%{background-position:-440px 0}}
+@keyframes starTwinkle{0%,100%{opacity:.55}50%{opacity:.95}}
+.baro-meteor{
+  position:absolute;top:14px;left:110%;width:90px;height:1.5px;z-index:1;
+  background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(122,245,248,.5), transparent);
+  box-shadow:0 0 8px rgba(122,245,248,.8);transform:rotate(-10deg);opacity:0;
+  animation:meteorShoot 7.5s linear infinite;
+}
+@keyframes meteorShoot{
+  0%,72%{left:108%;top:12px;opacity:0}
+  75%{opacity:1}
+  84%{left:-15%;top:42px;opacity:0}
+  100%{left:-15%;top:42px;opacity:0}
+}
+
+.baro-left{display:flex;align-items:center;gap:10px;position:relative;z-index:3;flex:1}
+.baro-label{font-family:'Orbitron',sans-serif;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:2px;color:var(--gold-bright);text-transform:uppercase;text-shadow:0 0 12px rgba(255,215,0,.5)}
+.baro-label .pulse-gold{width:9px;height:9px;border-radius:50%;background:var(--gold-bright);animation:pulseGold 1.6s infinite}
+@keyframes pulseGold{0%{box-shadow:0 0 0 0 rgba(255,215,0,.6)}70%{box-shadow:0 0 0 9px rgba(255,215,0,0)}100%{box-shadow:0 0 0 0 rgba(255,215,0,0)}}
+.baro-status-chip{
+  font-family:'Orbitron',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:1px;
+  padding:2px 8px;border-radius:999px;text-transform:uppercase;
+  background:rgba(83,229,232,.14);color:var(--accent-bright);border:1px solid rgba(83,229,232,.32);
+}
+.baro-status-chip.landed{background:rgba(101,230,173,.16);color:var(--green);border-color:rgba(101,230,173,.45)}
+.baro-status-chip.leaving{background:rgba(255,77,109,.16);color:#ff8ea3;border-color:rgba(255,77,109,.45)}
+
+.orbit-stage{
+  position:relative;z-index:2;flex-shrink:0;
+  width:280px;height:52px;
+  display:flex;align-items:center;justify-content:flex-end;
+}
+.orbit-trail{
+  position:absolute;left:16px;right:68px;top:50%;height:1px;
+  background:linear-gradient(90deg, rgba(83,229,232,.08), rgba(255,215,0,.45));
+  border-top:1px dashed rgba(255,215,0,.35);
+  transform:translateY(-50%);
+}
+.planet-wrap{
+  position:absolute;right:24px;top:50%;width:46px;height:46px;
+  transform:translateY(-50%);
+  display:grid;place-items:center;
+  animation:planetFloat 5s ease-in-out infinite;
+}
+@keyframes planetFloat{
+  0%,100%{transform:translateY(-50%) scale(1)}
+  50%{transform:translateY(calc(-50% - 2px)) scale(1.02)}
+}
+.planet-halo{
+  position:absolute;inset:-6px;border-radius:50%;
+  border:1px solid rgba(122,245,248,.28);
+  box-shadow:0 0 18px rgba(83,229,232,.25);
+  animation:haloSpin 10s linear infinite;
+}
+.planet-halo::after{
+  content:"";position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;
+  background:var(--gold-bright);box-shadow:0 0 6px var(--gold-bright);
+}
+@keyframes haloSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.planet-svg{width:46px;height:46px;overflow:visible;filter:drop-shadow(0 0 10px rgba(100,190,255,.35))}
+.planet-clouds{animation:cloudDrift 14s linear infinite;transform-origin:center}
+@keyframes cloudDrift{0%{transform:translateX(-4px)}50%{transform:translateX(4px)}100%{transform:translateX(-4px)}}
+
+.landing-pad-glow{
+  position:absolute;top:-2px;left:50%;width:22px;height:6px;transform:translateX(-50%);
+  border-radius:50%;background:radial-gradient(circle, rgba(101,230,173,.85), transparent 70%);
+  opacity:0;transition:opacity .4s;pointer-events:none;
+}
+.orbit-stage.is-landed .landing-pad-glow{opacity:1;animation:padPulse 1.5s ease-in-out infinite}
+@keyframes padPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.7}50%{transform:translateX(-50%) scale(1.3);opacity:1}}
+
+.rocket{
+  position:absolute;left:0;top:50%;
+  width:38px;height:38px;margin-top:-19px;
+  transform-origin:center center;z-index:4;
+  filter:drop-shadow(0 0 8px rgba(255,215,0,.6)) drop-shadow(0 0 14px rgba(83,229,232,.35));
+  will-change:transform,opacity;
+}
+.rocket-flame{transform-origin:32px 49px;animation:flameFlicker .18s ease-in-out infinite alternate}
+.rocket.is-landed .rocket-flame{opacity:0 !important;animation:none}
+@keyframes flameFlicker{0%{transform:scaleY(.85) scaleX(.95);opacity:.85}100%{transform:scaleY(1.22) scaleX(1.06);opacity:1}}
+
+.baro-right{display:flex;align-items:center;gap:16px;position:relative;z-index:3;flex:1;justify-content:flex-end}
+.baro-info{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+.baro-info .baro-loc{font-size:13.5px;color:#b8c8dc;font-weight:600}
+.baro-info .baro-loc strong{color:var(--gold-bright);font-weight:700;text-shadow:0 0 8px rgba(255,215,0,.35)}
+.baro-timer{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--gold-bright);font-variant-numeric:tabular-nums;letter-spacing:0.6px;text-shadow:0 0 10px rgba(255,215,0,.45)}
+
+/* ===== COMPACT LIVE NEWS BROADCAST STRIP ===== */
+.broadcast-strip{
+  flex:none;display:flex;align-items:stretch;
+  border:1px solid rgba(83,229,232,.28);border-radius:9px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(12,26,35,.97),rgba(6,13,20,.98));
+  min-height:44px;
+  box-shadow:0 3px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(83,229,232,.1);
+}
+.broadcast-header{
+  font-family:'Orbitron',sans-serif;flex:none;display:flex;align-items:center;gap:7px;padding:0 13px;
+  background:linear-gradient(135deg, rgba(83,229,232,.16), rgba(83,229,232,.04));
+  border-right:1px solid rgba(83,229,232,.24);
+  font-size:10.5px;font-weight:700;letter-spacing:1.8px;color:var(--accent-bright);text-transform:uppercase;
+}
+.broadcast-header .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent-bright);animation:pulseRing 1.5s infinite}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(83,229,232,.6)}70%{box-shadow:0 0 0 8px rgba(83,229,232,0)}100%{box-shadow:0 0 0 0 rgba(83,229,232,0)}}
+.broadcast-body{flex:1;min-width:0;position:relative;overflow:hidden;display:flex;align-items:center;padding:5px 14px}
+.broadcast-slide{display:none;width:100%;min-width:0;animation:slideFadeIn .35s ease both}
+.broadcast-slide.active{display:block}
+@keyframes slideFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.bc-head{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0}
+.bc-tag{
+  font-family:'Orbitron',sans-serif;display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+  color:var(--accent-bright);background:rgba(83,229,232,.14);padding:1px 7px;border-radius:3px;
+  border:1px solid rgba(83,229,232,.3);flex-shrink:0;
+}
+.bc-title{font-size:14.5px;font-weight:700;color:var(--txt);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bc-date{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.6px}
+.broadcast-dots{flex:none;display:flex;align-items:center;gap:5px;padding:0 12px;border-left:1px solid rgba(83,229,232,.2)}
+.broadcast-dots .bd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s;cursor:pointer}
+.broadcast-dots .bd.active{background:var(--accent-bright);box-shadow:0 0 8px var(--accent-bright);transform:scale(1.3)}
+
+/* ===== 4x2 MAIN PANELS + WORLD CYCLES WITH SUBTLE SPACE ANIMATION ===== */
+.content{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr auto;gap:8px;flex:1;min-height:0}
+.panel{
+  --p-accent:var(--accent-bright);
+  min-height:0;overflow:hidden;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(83,229,232,.09), transparent 46%),
+    linear-gradient(155deg, rgba(13,26,38,.94), rgba(5,11,19,.98));
+  border:1px solid rgba(83,229,232,.22);
+  border-radius:11px;
+  padding:9px 12px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  box-shadow:
+    inset 0 1px 0 rgba(134,249,252,.13),
+    inset 0 -1px 0 rgba(0,0,0,.5),
+    0 6px 20px rgba(0,0,0,.45);
+  transition:border-color .3s, box-shadow .3s, transform .25s;
+}
+
+/* Subtle internal starfield animation in every panel */
+.panel-space{
+  position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.45;
+  background-image:
+    radial-gradient(1px 1px at 15% 22%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 42% 68%, rgba(134,249,252,.55), transparent),
+    radial-gradient(1.5px 1.5px at 76% 32%, rgba(255,255,255,.65), transparent),
+    radial-gradient(1px 1px at 88% 82%, rgba(255,215,0,.5), transparent),
+    radial-gradient(1px 1px at 28% 88%, rgba(255,255,255,.55), transparent);
+  background-size:220px 180px;
+  animation:panelSpaceDrift 36s linear infinite, panelSpacePulse 7s ease-in-out infinite;
+}
+@keyframes panelSpaceDrift{0%{background-position:0 0}100%{background-position:-220px -180px}}
+@keyframes panelSpacePulse{0%,100%{opacity:.28}50%{opacity:.55}}
+
+.panel > h2, .panel > .entries{position:relative;z-index:1}
+
+.panel.steel-panel{
+  --p-accent:var(--steel);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255,77,109,.12), transparent 48%),
+    linear-gradient(155deg, rgba(28,15,24,.95), rgba(10,8,14,.98));
+  border-color:rgba(255,77,109,.28);
+}
+.panel.storm-panel{
+  --p-accent:var(--storm);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(93,169,255,.13), transparent 48%),
+    linear-gradient(155deg, rgba(14,22,42,.95), rgba(6,10,20,.98));
+  border-color:rgba(93,169,255,.28);
+}
+.panel.arb-panel{
+  --p-accent:var(--gold-bright);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255,215,0,.1), transparent 48%),
+    linear-gradient(155deg, rgba(20,25,36,.95), rgba(8,11,18,.98));
+  border-color:rgba(255,215,0,.26);
+}
+.panel.arch-panel{
+  --p-accent:var(--violet);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(215,158,255,.11), transparent 48%),
+    linear-gradient(155deg, rgba(20,17,36,.95), rgba(9,8,18,.98));
+  border-color:rgba(215,158,255,.28);
+}
+.panel:hover{
+  transform:translateY(-1px);
+  border-color:color-mix(in srgb, var(--p-accent) 60%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 10px 26px rgba(0,0,0,.52),
+    0 0 24px color-mix(in srgb, var(--p-accent) 22%, transparent);
+}
+.panel::before{
+  content:"";position:absolute;left:14px;top:0;width:48px;height:2px;z-index:2;
+  background:linear-gradient(90deg, var(--gold-bright), transparent);
+  opacity:.9;
+}
+.panel::after{
+  content:"";position:absolute;right:0;top:0;width:90px;height:2px;z-index:2;
+  background:linear-gradient(90deg, transparent, var(--p-accent));
+  opacity:.95;
+  animation:panelEdgeGlow 4s ease-in-out infinite;
+}
+@keyframes panelEdgeGlow{0%,100%{opacity:.6}50%{opacity:1}}
+
+.panel h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:10.8px;letter-spacing:1.3px;margin:0 0 7px;
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;gap:6px;
+  font-weight:700;padding-bottom:6px;
+  border-bottom:1px solid transparent;
+  border-image:linear-gradient(90deg, rgba(83,229,232,.35), rgba(255,215,0,.22), rgba(83,229,232,.04)) 1;
+}
+.steel-panel h2{border-image:linear-gradient(90deg, rgba(255,77,109,.5), rgba(255,215,0,.2), rgba(255,77,109,.05)) 1}
+.storm-panel h2{border-image:linear-gradient(90deg, rgba(93,169,255,.5), rgba(83,229,232,.2), rgba(93,169,255,.05)) 1}
+.arch-panel h2{border-image:linear-gradient(90deg, rgba(215,158,255,.5), rgba(83,229,232,.2), rgba(215,158,255,.05)) 1}
+
+.panel h2 .title-text{
+  display:inline-flex;align-items:center;gap:6px;min-width:0;
+  background:linear-gradient(90deg, var(--gold-bright), var(--accent-bright), var(--gold-bright));
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:panelShine 5s linear infinite;
+}
+.steel-panel h2 .title-text{
+  background:linear-gradient(90deg, #ff708c, #ffd6df, #ff4769);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.storm-panel h2 .title-text{
+  background:linear-gradient(90deg, #75b8ff, #d4ebff, #5da9ff);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.arch-panel h2 .title-text{
+  background:linear-gradient(90deg, #dfb4ff, #f3e6ff, #b374ff);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.panel h2 .title-text::before{
+  content:"";width:5px;height:5px;border-radius:1px;transform:rotate(45deg);
+  background:var(--p-accent);box-shadow:0 0 9px var(--p-accent);
+  -webkit-text-fill-color:initial;flex-shrink:0;
+}
+@keyframes panelShine{0%{background-position:0% center}100%{background-position:200% center}}
+.panel h2 small{
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px;color:var(--accent-bright);font-weight:700;letter-spacing:.8px;
+  background:rgba(83,229,232,.09);border:1px solid rgba(83,229,232,.22);
+  padding:1px 7px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+}
+.steel-panel h2 small{color:#ff8ea3;background:rgba(255,77,109,.12);border-color:rgba(255,77,109,.35)}
+.storm-panel h2 small{color:#9bceff;background:rgba(93,169,255,.12);border-color:rgba(93,169,255,.35)}
+.arb-panel h2 small{color:var(--gold-bright);background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.3)}
+.arch-panel h2 small{color:#e6c6ff;background:rgba(215,158,255,.12);border-color:rgba(215,158,255,.35)}
+
+.entries{flex:1;min-height:0;overflow-y:auto;padding-right:4px}
+.entries::-webkit-scrollbar{width:4px}
+.entries::-webkit-scrollbar-track{background:rgba(83,229,232,.06);border-radius:4px}
+.entries::-webkit-scrollbar-thumb{background:rgba(83,229,232,.32);border-radius:4px}
+.entries::-webkit-scrollbar-thumb:hover{background:var(--accent-bright)}
+
+.entry{
+  padding:6px 8px;margin-bottom:4px;border-radius:7px;
+  background:rgba(9,19,28,.64);border:1px solid rgba(83,229,232,.09);
+  border-left:2px solid rgba(83,229,232,.26);
+  transition:background .2s, border-color .2s;
+}
+.entry:last-child{margin-bottom:0}
+.entry:hover{background:rgba(83,229,232,.09);border-color:rgba(83,229,232,.3);border-left-color:var(--accent-bright)}
+.steel-panel .entry{background:rgba(24,11,19,.62);border-color:rgba(255,77,109,.14);border-left-color:rgba(255,77,109,.45)}
+.steel-panel .entry:hover{background:rgba(255,77,109,.11);border-color:rgba(255,77,109,.38);border-left-color:var(--steel)}
+.storm-panel .entry{background:rgba(10,18,34,.64);border-color:rgba(93,169,255,.14);border-left-color:rgba(93,169,255,.45)}
+.storm-panel .entry:hover{background:rgba(93,169,255,.11);border-color:rgba(93,169,255,.38);border-left-color:var(--storm)}
+.arch-panel .entry{background:rgba(17,13,30,.64);border-color:rgba(215,158,255,.15);border-left-color:rgba(215,158,255,.45)}
+.arch-panel .entry:hover{background:rgba(215,158,255,.1);border-color:rgba(215,158,255,.36);border-left-color:var(--violet)}
+
+.entry b{font-size:14px;line-height:1.25;display:block;color:var(--txt);font-weight:700}
+.entry small{font-size:12px;line-height:1.3;color:var(--muted);display:block;margin-top:2px;font-weight:500}
+.entry .reward{color:var(--gold-bright);font-weight:700}
+.steel-panel .entry .reward{color:#ff8ea3}
+.storm-panel .entry .reward{color:#9bceff}
+.empty{font-size:13px;color:#8aa0b8;padding:6px 2px;font-weight:600}
+
+/* ===== BADGES IN ARBITRATION & ARCHIMEDEA ===== */
+#arbitration .entry, #archimedea .entry{padding:5px 8px;margin-bottom:4px}
+#arbitration .entry.arb-now{
+  background:linear-gradient(135deg, rgba(255,215,0,.13), rgba(83,229,232,.07));
+  border-color:rgba(255,215,0,.34);border-left:3px solid var(--gold-bright);
+}
+.tag-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tag-badge{
+  font-family:'Orbitron',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  padding:1.5px 6px;border-radius:4px;flex-shrink:0;
+}
+.tag-badge.now{background:rgba(255,215,0,.22);color:var(--gold-bright);border:1px solid rgba(255,215,0,.5);box-shadow:0 0 8px rgba(255,215,0,.22)}
+.tag-badge.next{background:rgba(83,229,232,.14);color:var(--accent-bright);border:1px solid rgba(83,229,232,.34)}
+.tag-badge.deep{background:rgba(255,215,0,.18);color:var(--gold-bright);border:1px solid rgba(255,215,0,.4)}
+.tag-badge.temporal{background:rgba(215,158,255,.18);color:#e6c6ff;border:1px solid rgba(215,158,255,.42)}
+.tag-head b{font-size:13.5px;display:inline}
+
+/* ===== WORLD CYCLES PANEL ===== */
+.panel.cycles-panel{grid-column:span 4;padding:7px 12px}
+.panel.cycles-panel h2{margin-bottom:5px;padding-bottom:4px}
+.cycles-panel .entries{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;align-content:start;overflow:visible}
+.cycles-panel .entry{
+  margin-bottom:0;padding:5px 9px;
+  background:linear-gradient(145deg,rgba(14,29,39,.88),rgba(7,15,23,.94));
+  border:1px solid rgba(83,229,232,.18);
+  border-top:2px solid rgba(83,229,232,.42);
+  border-left:1px solid rgba(83,229,232,.18);
+  border-radius:8px;
+}
+.cycles-panel .entry:hover{border-top-color:var(--gold-bright);border-color:rgba(83,229,232,.4)}
+.cycles-panel .entry b{font-family:'Orbitron',sans-serif;font-size:10.5px;letter-spacing:1.1px;color:var(--accent-bright)}
+.cycles-panel .entry small{font-size:11.5px;margin-top:1px}
+
+/* ===== AUTOSCROLL PANELS ===== */
+.panel.autoscroll-panel .entries{overflow:hidden;position:relative;flex:1;min-height:0}
+.scroll-track{display:flex;flex-direction:column;gap:0;animation:autoScroll 30s linear infinite}
+.scroll-track:hover{animation-play-state:paused}
+@keyframes autoScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.scroll-track .entry{margin-bottom:5px}
+
+@media(max-width:1280px){
+  .top-cards{grid-template-columns:repeat(3,1fr)}
+  .content{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr) auto}
+  .panel.cycles-panel{grid-column:span 2}
+  .cycles-panel .entries{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .screen{padding:10px;overflow-y:auto;height:auto;min-height:100vh}
+  html,body{overflow:auto}
+  header{height:auto;flex-wrap:wrap;gap:8px}
+  .top-cards,.content{grid-template-columns:1fr}
+  .panel.cycles-panel{grid-column:span 1}
+  .cycles-panel .entries{grid-template-columns:repeat(2,1fr)}
+  h1 .wf{font-size:24px;letter-spacing:3px}
+  h1 em{font-size:16px;letter-spacing:2px}
+  .baro-strip{flex-direction:column;gap:6px;padding:8px 14px}
+  .baro-left,.baro-right{flex:none;width:100%;justify-content:center}
+  .bc-title{white-space:normal}
+}
+</style>
+</head>
+<body>
+<div class="space-bg" aria-hidden="true"></div>
+<div class="screen">
+  <header>
+    <div class="brand">
+      <div class="orokin-crest" aria-hidden="true"></div>
+      <h1>
+        <span class="wf">WARFRAME</span>
+        <span class="sep">◈</span>
+        <em>LIVE UPDATES</em>
+      </h1>
+    </div>
+    <div class="headright">
+      <div class="live"><i class="dot"></i>ORIGIN SYSTEM · LIVE</div>
+      <div class="headmeta">NEXT SYNC <span id="countdown">60</span>S</div>
+      <div id="warning"></div>
+    </div>
+  </header>
+
+  <!-- ===== DARVO · PRIME RESURGENCE (VIOLET) · ARCHON HUNT · WORLD EVENTS · WORLD BUILD ===== -->
+  <div class="top-cards">
+    <div class="top-card darvo-card">
+      <div class="tc-meta">
+        <div class="tc-label">DARVO'S DEAL</div>
+        <div class="tc-main" id="darvoItem">Checking Darvo's stock...</div>
+        <div class="tc-sub" id="darvoDetail">Relay market feed</div>
+      </div>
+      <div class="tc-pill" id="darvoPill">--</div>
+    </div>
+
+    <div class="top-card resurgence-card">
+      <div class="tc-meta">
+        <div class="tc-label">PRIME RESURGENCE</div>
+        <div class="tc-main" id="resurgenceMain">Checking Varzia...</div>
+        <div class="tc-sub" id="resurgenceDetail">Maroo's Bazaar</div>
+      </div>
+      <div class="tc-pill" id="resurgencePill">AYA</div>
+    </div>
+
+    <div class="top-card archon-card">
+      <div class="tc-meta">
+        <div class="tc-label">ARCHON HUNT</div>
+        <div class="tc-main" id="archonMain">Checking Narmer...</div>
+        <div class="tc-sub" id="archonDetail">Weekly Archon Sortie</div>
+      </div>
+      <div class="tc-pill" id="archonPill">--</div>
+    </div>
+
+    <div class="top-card events-card">
+      <div class="tc-meta">
+        <div class="tc-label">WORLD EVENTS</div>
+        <div class="tc-main" id="eventsMain">Scanning Origin System...</div>
+        <div class="tc-sub" id="eventsDetail">Active tactical events</div>
+      </div>
+      <div class="tc-pill" id="eventsPill">0</div>
+    </div>
+
+    <div class="top-card build-card">
+      <div class="tc-meta">
+        <div class="tc-label">WORLD BUILD</div>
+        <div class="tc-main" id="kBuild">CONNECTING</div>
+        <div class="tc-sub" id="buildPlatform">PC · WORLDSTATE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BARO STRIP — ANIMATED SPACE + SYNCED ROCKET + LOCATION PLANETS ===== -->
+  <div class="baro-strip" id="baroStrip">
+    <div class="baro-nebula"></div>
+    <div class="baro-stars"></div>
+    <div class="baro-stars2"></div>
+    <div class="baro-meteor"></div>
+    <div class="baro-left">
+      <div class="baro-label"><span class="pulse-gold"></span>BARO KI'TEER</div>
+      <span class="baro-status-chip" id="baroStateChip">SYNCING</span>
+    </div>
+
+    <div class="orbit-stage" id="orbitStage">
+      <div class="orbit-trail"></div>
+      <div class="rocket" id="baroRocket">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+          <defs>
+            <linearGradient id="hullGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#d7a83c"/>
+              <stop offset="50%" stop-color="#fff4bf"/>
+              <stop offset="100%" stop-color="#d7a83c"/>
+            </linearGradient>
+            <radialGradient id="windowGrad" cx="35%" cy="35%">
+              <stop offset="0%" stop-color="#d9feff"/>
+              <stop offset="65%" stop-color="#4fd8e0"/>
+              <stop offset="100%" stop-color="#134b54"/>
+            </radialGradient>
+            <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="35%" stop-color="#7af5f8"/>
+              <stop offset="75%" stop-color="#ffae34"/>
+              <stop offset="100%" stop-color="rgba(255,77,109,0)"/>
+            </linearGradient>
+          </defs>
+          <path class="rocket-flame" d="M27 49 Q32 64 37 49 Q32 54 27 49 Z" fill="url(#flameGrad)"/>
+          <path d="M32 4 C25 14, 22 24, 22 34 L22 46 L32 51 L42 46 L42 34 C42 24, 39 14, 32 4 Z"
+                fill="url(#hullGrad)" stroke="#ffd700" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M32 6 C29 12, 28 18, 28 24 L32 28 L36 24 C36 18, 35 12, 32 6 Z"
+                fill="rgba(255,255,255,.2)"/>
+          <path d="M22 38 L14 48 L22 46 Z" fill="#a87914" stroke="#ffd700" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M42 38 L50 48 L42 46 Z" fill="#a87914" stroke="#ffd700" stroke-width="1.8" stroke-linejoin="round"/>
+          <rect x="27" y="45" width="10" height="4" rx="1" fill="#6f4414" stroke="#ffd700" stroke-width="1.2"/>
+          <circle cx="32" cy="28" r="5" fill="url(#windowGrad)" stroke="#7af5f8" stroke-width="1.8"/>
+          <circle cx="31" cy="27" r="1.6" fill="#ffffff" opacity=".92"/>
+        </svg>
+      </div>
+      <div class="planet-wrap" id="baroPlanetWrap">
+        <div class="planet-halo"></div>
+        <div class="landing-pad-glow"></div>
+        <div id="baroPlanetArt"></div>
+      </div>
+    </div>
+
+    <div class="baro-right">
+      <div class="baro-info">
+        <span class="baro-loc" id="baroLoc">Checking location...</span>
+        <span class="baro-timer" id="baroTopTimer">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMPACT LIVE NEWS BROADCAST STRIP ===== -->
+  <div class="broadcast-strip">
+    <div class="broadcast-header"><span class="pulse"></span>BROADCAST</div>
+    <div class="broadcast-body" id="broadcastBody">
+      <div class="broadcast-slide active">
+        <div class="bc-head">
+          <span class="bc-tag">ORIGIN NEWS</span>
+          <div class="bc-title">Connecting to Origin System news feed...</div>
+        </div>
+      </div>
+    </div>
+    <div class="broadcast-dots" id="broadcastDots">
+      <div class="bd active"></div>
+    </div>
+  </div>
+
+  <!-- ===== 4x2 MAIN PANELS + WORLD CYCLES ===== -->
+  <div class="content">
+    <section class="panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">01 / ALERTS</span> <small>ACTIVE OPS</small></h2>
+      <div class="entries" id="alerts"></div>
+    </section>
+
+    <section class="panel autoscroll-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">02 / VOID FISSURES (NORMAL)</span> <small>STAR CHART</small></h2>
+      <div class="entries" id="fissuresNormal"><div class="scroll-track" id="fissuresNormalTrack"></div></div>
+    </section>
+
+    <section class="panel autoscroll-panel steel-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">03 / VOID FISSURES (STEEL PATH)</span> <small>STEEL ESSENCE</small></h2>
+      <div class="entries" id="fissuresSteel"><div class="scroll-track" id="fissuresSteelTrack"></div></div>
+    </section>
+
+    <section class="panel autoscroll-panel storm-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">04 / VOID STORMS (RAILJACK)</span> <small>PROXIMA</small></h2>
+      <div class="entries" id="voidStorms"><div class="scroll-track" id="voidStormsTrack"></div></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">05 / DAILY SORTIE</span> <small>3-STAGE</small></h2>
+      <div class="entries" id="sortie"></div>
+    </section>
+
+    <section class="panel autoscroll-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">06 / INVASIONS</span> <small>CONFLICT</small></h2>
+      <div class="entries" id="invasions"><div class="scroll-track" id="invasionsTrack"></div></div>
+    </section>
+
+    <section class="panel arb-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">07 / ARBITRATION</span> <small>HOURLY</small></h2>
+      <div class="entries" id="arbitration"></div>
+    </section>
+
+    <section class="panel arch-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">08 / ARCHIMEDEA</span> <small>DEEP · TEMPORAL</small></h2>
+      <div class="entries" id="archimedea"></div>
+    </section>
+
+    <section class="panel cycles-panel">
+      <div class="panel-space" aria-hidden="true"></div>
+      <h2><span class="title-text">09 / WORLD CYCLES</span> <small>OPEN WORLD CONDITIONS</small></h2>
+      <div class="entries" id="cycles"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const BASE = "https://api.warframestat.us/pc";
+const PROXY = "https://api.allorigins.win/raw?url=";
+const ARB_SCHEDULE_URL = "https://browse.wf/arbys.txt";
+const SOL_NODES_URLS = [
+  "https://cdn.jsdelivr.net/gh/WFCD/warframe-worldstate-data/data/solNodes.json",
+  "https://raw.githubusercontent.com/WFCD/warframe-worldstate-data/master/data/solNodes.json"
+];
+const INTERVAL = 60000;
+const ROTATE_BROADCAST = 6500;
+
+const $ = id => document.getElementById(id);
+const arr = v => Array.isArray(v) ? v : (v ? [v] : []);
+const clean = v => String(v ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const esc = v => clean(v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function left(v){
+  if(!v) return "";
+  const ms = new Date(v).getTime() - Date.now();
+  if(!Number.isFinite(ms)) return "";
+  if(ms <= 0) return "Ending";
+  const totalH = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  if(totalH >= 24){
+    const d = Math.floor(totalH / 24), h = totalH % 24;
+    return `${d}d ${h}h remaining`;
+  }
+  return totalH ? `${totalH}h ${m}m remaining` : `${m}m remaining`;
+}
+function node(x){ return x?.node || x?.location || x?.mission?.node || x?.place || "Location unknown"; }
+function reward(x){
+  const r = x?.mission?.reward || x?.reward || {};
+  const out = [];
+  for(const i of arr(r.countedItems)) out.push((i.count>1?i.count+"× ":"")+(i.type||i.key||"Item"));
+  for(const i of arr(r.items)) out.push(typeof i==="string" ? i : (i.type||i.name||""));
+  if(r.credits) out.push(Number(r.credits).toLocaleString()+" Credits");
+  if(!out.length && r.asString) out.push(clean(r.asString));
+  return out.filter(Boolean).join(" · ") || "";
+}
+function row(title, detail="", extra=""){
+  return `<div class="entry"><b>${esc(title)}</b>${detail?`<small>${esc(detail)}</small>`:""}${extra?`<small class="reward">${esc(extra)}</small>`:""}</div>`;
+}
+function badgeRow(badgeText, badgeKind, title, detail="", extra="", extraCls=""){
+  return `<div class="entry ${extraCls}"><div class="tag-head"><span class="tag-badge ${badgeKind}">${esc(badgeText)}</span><b>${esc(title)}</b></div>${detail?`<small>${esc(detail)}</small>`:""}${extra?`<small class="reward">${esc(extra)}</small>`:""}</div>`;
+}
+function setlist(id, items, none="No active transmissions."){
+  $(id).innerHTML = items.length ? items.join("") : `<div class="empty">${none}</div>`;
+}
+function factionReward(f){ return reward(f) || f?.reward?.asString || "Reward details unavailable"; }
+
+function buildScrollTrack(trackEl, items, emptyMsg){
+  if(!items.length){
+    trackEl.innerHTML = `<div class="empty">${emptyMsg}</div>`;
+    trackEl.style.animationDuration = "0s";
+    return;
+  }
+  const html = items.join("");
+  trackEl.innerHTML = html + html;
+  const dur = Math.max(16, items.length * 5);
+  trackEl.style.animationDuration = dur + "s";
+}
+
+/* ============================================================
+   LIVE NEWS BROADCAST STRIP
+   ============================================================ */
+let bcIdx = 0;
+let bcTimer = null;
+
+function showBroadcastSlide(idx){
+  const slides = document.querySelectorAll("#broadcastBody .broadcast-slide");
+  const dots = document.querySelectorAll("#broadcastDots .bd");
+  if(!slides.length) return;
+  bcIdx = ((idx % slides.length) + slides.length) % slides.length;
+  slides.forEach((s, i) => s.classList.toggle("active", i === bcIdx));
+  dots.forEach((d, i) => d.classList.toggle("active", i === bcIdx));
+}
+
+function renderBroadcastNews(w){
+  const allNews = arr(w?.news);
+  const datedNews = allNews
+    .filter(n => n?.message && new Date(n.date).getFullYear() >= 2000)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const items = (datedNews.length ? datedNews : allNews.filter(n => n?.message)).slice(0, 6);
+
+  if(!items.length){
+    $("broadcastBody").innerHTML = `<div class="broadcast-slide active"><div class="bc-head"><span class="bc-tag">ORIGIN NEWS</span><div class="bc-title">No recent Warframe news transmissions.</div></div></div>`;
+    $("broadcastDots").innerHTML = `<div class="bd active"></div>`;
+    return;
+  }
+
+  $("broadcastBody").innerHTML = items.map((n, i) => {
+    const tag = n.update ? "UPDATE" : n.stream ? "STREAM" : n.primeAccess ? "PRIME ACCESS" : n.priority ? "PRIORITY" : "ORIGIN NEWS";
+    const msg = clean(n.translations?.en || n.message || "Warframe Update");
+    const dMs = new Date(n.date).getTime();
+    const dateStr = Number.isFinite(dMs) && new Date(dMs).getFullYear() >= 2000
+      ? new Date(dMs).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+      : "Pinned";
+    return `<div class="broadcast-slide${i===0?" active":""}" data-index="${i}">
+      <div class="bc-head">
+        <span class="bc-tag">${esc(tag)}</span>
+        <div class="bc-title">${esc(msg)}</div>
+        <span class="bc-date">${esc(dateStr)}</span>
+      </div>
+    </div>`;
+  }).join("");
+
+  $("broadcastDots").innerHTML = items.map((_, i) =>
+    `<div class="bd${i===0?" active":""}" data-index="${i}"></div>`
+  ).join("");
+
+  document.querySelectorAll("#broadcastDots .bd").forEach(dot => {
+    dot.addEventListener("click", () => showBroadcastSlide(Number(dot.dataset.index) || 0));
+  });
+
+  bcIdx = 0;
+  if(bcTimer) clearInterval(bcTimer);
+  bcTimer = setInterval(() => showBroadcastSlide(bcIdx + 1), ROTATE_BROADCAST);
+}
+
+/* ============================================================
+   ARBITRATION SCHEDULE + NODE METADATA (NOW + 3 NEXT)
+   ============================================================ */
+let arbSchedule = null;
+let solNodes = null;
+
+function isValidWorldArbitration(arb){
+  if(!arb || arb.expired) return false;
+  if(!arb.node || arb.node === "SolNode000") return false;
+  if(!arb.type || arb.type === "Unknown") return false;
+  const exp = new Date(arb.expiry).getTime();
+  return Number.isFinite(exp) && exp > Date.now();
+}
+
+async function getArbitrationSchedule(){
+  if(arbSchedule && arbSchedule.length && Date.now() < arbSchedule[arbSchedule.length - 1].tsMs){
+    return arbSchedule;
+  }
+  const urls = [ARB_SCHEDULE_URL, PROXY + encodeURIComponent(ARB_SCHEDULE_URL)];
+  let text = "";
+  for(const url of urls){
+    try {
+      const res = await fetch(url, { cache: "default" });
+      if(res.ok){
+        text = await res.text();
+        if(text && text.includes(",")) break;
+      }
+    } catch (e) {}
+  }
+  if(!text) throw new Error("Arbitration schedule unavailable");
+
+  const parsed = text.trim().split(/\r?\n/).map(line => {
+    const [ts, nodeKey] = line.split(",");
+    const tsMs = Number(ts) * 1000;
+    return { tsMs, nodeKey: (nodeKey || "").trim() };
+  }).filter(x => Number.isFinite(x.tsMs) && x.nodeKey).sort((a, b) => a.tsMs - b.tsMs);
+
+  if(!parsed.length) throw new Error("Empty arbitration schedule");
+  arbSchedule = parsed;
+  return arbSchedule;
+}
+
+async function getSolNodes(){
+  if(solNodes) return solNodes;
+  for(const url of SOL_NODES_URLS){
+    try {
+      const res = await fetch(url, { cache: "default" });
+      if(res.ok){
+        solNodes = await res.json();
+        return solNodes;
+      }
+    } catch (e) {}
+  }
+  throw new Error("SolNodes metadata unavailable");
+}
+
+async function loadArbitrationData(){
+  await Promise.all([getArbitrationSchedule(), getSolNodes()]);
+}
+
+function findArbitrationEntries(nowMs = Date.now(), upcomingCount = 3){
+  if(!arbSchedule || !arbSchedule.length) return { current: null, upcoming: [] };
+  let lo = 0, hi = arbSchedule.length - 1, idx = -1;
+  while(lo <= hi){
+    const mid = (lo + hi) >> 1;
+    if(arbSchedule[mid].tsMs <= nowMs){
+      idx = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  const entry = idx >= 0 ? arbSchedule[idx] : null;
+  const nextEntry = idx >= 0 && idx + 1 < arbSchedule.length ? arbSchedule[idx + 1] : null;
+  const expiryMs = entry ? (nextEntry ? nextEntry.tsMs : entry.tsMs + 3600000) : 0;
+  const current = entry && nowMs < expiryMs ? { ...entry, expiryMs } : null;
+  const startNext = idx + 1;
+  const upcoming = arbSchedule.slice(startNext, startNext + upcomingCount);
+  return { current, upcoming };
+}
+
+function formatStartCountdown(targetMs){
+  const diff = targetMs - Date.now();
+  if(!Number.isFinite(diff) || diff <= 0) return "Starting now";
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const rel = h ? `${h}h ${m}m` : `${m}m`;
+  return `Starts in ${rel}`;
+}
+
+function renderArbitration(w){
+  const arbRows = [];
+  const now = Date.now();
+  const arb = w?.arbitration;
+  const { current: schedCur, upcoming } = findArbitrationEntries(now, 3);
+
+  if(isValidWorldArbitration(arb)){
+    const variant = arb.sharkwing ? "Sharkwing" : (arb.archwing ? "Archwing" : "Standard");
+    arbRows.push(badgeRow(
+      "NOW", "now",
+      `${arb.type} · ${arb.node}`,
+      `${arb.enemy || "Unknown Faction"} · ${variant} · ${left(arb.expiry) || "Active"}`,
+      "", "arb-now"
+    ));
+  } else if(schedCur){
+    const meta = solNodes?.[schedCur.nodeKey];
+    const missionType = meta?.type || "Arbitration";
+    const location = meta?.value || schedCur.nodeKey;
+    const enemyFaction = meta?.enemy || "Unknown Faction";
+    arbRows.push(badgeRow(
+      "NOW", "now",
+      `${missionType} · ${location}`,
+      `${enemyFaction} · Standard · ${left(schedCur.expiryMs) || "Active"}`,
+      "", "arb-now"
+    ));
+  }
+
+  upcoming.forEach(nextItem => {
+    const nextMeta = solNodes?.[nextItem.nodeKey];
+    const nextType = nextMeta?.type || "Arbitration";
+    const nextLoc = nextMeta?.value || nextItem.nodeKey;
+    const nextEnemy = nextMeta?.enemy || "Unknown Faction";
+    arbRows.push(badgeRow(
+      "NEXT", "next",
+      `${nextType} · ${nextLoc}`,
+      `${nextEnemy} · ${formatStartCountdown(nextItem.tsMs)}`
+    ));
+  });
+
+  if(!arbRows.length){
+    arbRows.push(row(
+      "Arbitration Unavailable",
+      "Check back at the top of the hour for the next rotation",
+      ""
+    ));
+  }
+
+  setlist("arbitration", arbRows, "No arbitration data available.");
+}
+
+/* ============================================================
+   ARCHIMEDEA PANEL (DEEP ARCHIMEDEA & TEMPORAL ARCHIMEDEA)
+   ============================================================ */
+function renderArchimedea(w){
+  const list = arr(w?.archimedeas);
+  if(!list.length){
+    setlist("archimedea", [], "Archimedea data unavailable.");
+    return;
+  }
+
+  const rows = [];
+  list.forEach(a => {
+    const typeKey = clean(a.type || a.typeKey).replace(/\s+/g, "").toUpperCase();
+    const isTemporal = typeKey.includes("HEX");
+    const label = isTemporal ? "Temporal Archimedea" : "Deep Archimedea";
+    const badge = isTemporal ? "TEMPORAL" : "DEEP";
+    const badgeKind = isTemporal ? "temporal" : "deep";
+
+    const missions = arr(a.missions).map((m, idx) => {
+      const mType = clean(m.missionType || m.type || "Mission");
+      const dev = clean(m.deviation?.name || "");
+      return `${idx + 1}. ${mType}${dev ? ` (${dev})` : ""}`;
+    }).join(" · ");
+
+    const mods = arr(a.personalModifiers).map(p => clean(p.name)).filter(Boolean).slice(0, 3).join(", ");
+    rows.push(badgeRow(
+      badge, badgeKind,
+      `${label} · ${left(a.expiry) || "Weekly"}`,
+      missions || "Missions pending",
+      mods ? `Modifiers: ${mods}` : ""
+    ));
+  });
+
+  setlist("archimedea", rows, "Archimedea data unavailable.");
+}
+
+/* ============================================================
+   WORLD CYCLES — SELF-CORRECTING PHASE ADVANCEMENT
+   If api.warframestat.us/pc lags behind UTC, advance each
+   deterministic cycle forward from its API anchor timestamps.
+   ============================================================ */
+function resolveCycleState(key, raw, now = Date.now()){
+  if(!raw) return null;
+  const actMs = new Date(raw.activation).getTime();
+  const expMs = new Date(raw.expiry).getTime();
+
+  // If the API timestamp is still current, use it directly
+  if(Number.isFinite(expMs) && expMs > now){
+    const rawState = raw.state || raw.active || (raw.isDay ? "day" : raw.isWarm ? "warm" : raw.isCorpus ? "corpus" : "active");
+    return { state: String(rawState).toUpperCase(), expiryMs: expMs };
+  }
+
+  // Advance deterministic cycles if API expiry is in the past
+  if(!Number.isFinite(actMs) || !Number.isFinite(expMs)){
+    return { state: String(raw.state || "—").toUpperCase(), expiryMs: expMs };
+  }
+
+  if(key === "cetusCycle" || key === "cambionCycle"){
+    const nightDur = 50 * 60000;
+    const dayDur = 100 * 60000;
+    const period = nightDur + dayDur; // 150m
+    const st = String(raw.state || "").toLowerCase();
+    const isShortPhase = st === "night" || st === "vome";
+    const firstDur = isShortPhase ? nightDur : dayDur;
+    const firstName = key === "cetusCycle" ? (isShortPhase ? "night" : "day") : (isShortPhase ? "vome" : "fass");
+    const secondName = key === "cetusCycle" ? (isShortPhase ? "day" : "night") : (isShortPhase ? "fass" : "vome");
+
+    const offset = ((now - actMs) % period + period) % period;
+    const cycleStart = now - offset;
+    if(offset < firstDur){
+      return { state: firstName.toUpperCase(), expiryMs: cycleStart + firstDur };
+    }
+    return { state: secondName.toUpperCase(), expiryMs: cycleStart + period };
+  }
+
+  if(key === "vallisCycle"){
+    const warmDur = 400000;  // 6m 40s
+    const coldDur = 1200000; // 20m
+    const period = warmDur + coldDur;
+    const isWarmFirst = String(raw.state || "").toLowerCase() === "warm";
+    const firstDur = isWarmFirst ? warmDur : coldDur;
+    const firstName = isWarmFirst ? "warm" : "cold";
+    const secondName = isWarmFirst ? "cold" : "warm";
+
+    const offset = ((now - actMs) % period + period) % period;
+    const cycleStart = now - offset;
+    if(offset < firstDur){
+      return { state: firstName.toUpperCase(), expiryMs: cycleStart + firstDur };
+    }
+    return { state: secondName.toUpperCase(), expiryMs: cycleStart + period };
+  }
+
+  if(key === "earthCycle"){
+    const phaseDur = 4 * 3600000;
+    const steps = Math.floor((now - actMs) / phaseDur);
+    const baseNight = String(raw.state || "").toLowerCase() === "night";
+    const isNight = (steps % 2 === 0) ? baseNight : !baseNight;
+    return { state: isNight ? "NIGHT" : "DAY", expiryMs: actMs + (steps + 1) * phaseDur };
+  }
+
+  if(key === "zarimanCycle"){
+    const phaseDur = 2.5 * 3600000;
+    const steps = Math.floor((now - actMs) / phaseDur);
+    const baseCorpus = String(raw.state || "").toLowerCase() === "corpus";
+    const isCorpus = (steps % 2 === 0) ? baseCorpus : !baseCorpus;
+    return { state: isCorpus ? "CORPUS" : "GRINEER", expiryMs: actMs + (steps + 1) * phaseDur };
+  }
+
+  if(key === "duviriCycle"){
+    const moods = ["joy", "anger", "envy", "sorrow", "fear"];
+    const phaseDur = 2 * 3600000;
+    const startIdx = Math.max(0, moods.indexOf(String(raw.state || "joy").toLowerCase()));
+    const steps = Math.floor((now - actMs) / phaseDur);
+    const mood = moods[(startIdx + steps) % moods.length];
+    return { state: mood.toUpperCase(), expiryMs: actMs + (steps + 1) * phaseDur };
+  }
+
+  return { state: String(raw.state || "—").toUpperCase(), expiryMs: expMs };
+}
+
+function renderCycles(w){
+  if(!w){
+    setlist("cycles", [], "World cycle data unavailable.");
+    return;
+  }
+  const now = Date.now();
+  const cyc = [];
+  for(const [k, n] of [["cetusCycle","CETUS"],["vallisCycle","VALLIS"],["cambionCycle","CAMBION"],["earthCycle","EARTH"],["duviriCycle","DUVIRI"],["zarimanCycle","ZARIMAN"]]){
+    const resolved = resolveCycleState(k, w[k], now);
+    if(resolved){
+      cyc.push(row(n, resolved.state, left(resolved.expiryMs)));
+    }
+  }
+  setlist("cycles", cyc, "World cycle data unavailable.");
+}
+
+/* ============================================================
+   TOP CARDS: DARVO · PRIME RESURGENCE · ARCHON HUNT · EVENTS · BUILD
+   ============================================================ */
+function formatVaultPair(raw){
+  let s = clean(raw)
+    .replace(/^M\s*P\s*V\s+/i, "")
+    .replace(/\s+(Dual|Single)\s+Pack$/i, "")
+    .trim();
+  if(!s) return "";
+  if(!s.includes("&") && /Prime$/i.test(s)){
+    const base = s.replace(/\s+Prime$/i, "").trim();
+    const parts = base.split(/\s+/);
+    if(parts.length === 2) s = `${parts[0]} & ${parts[1]} Prime`;
+  }
+  return s;
+}
+
+function getResurgencePrimes(vt){
+  if(!vt) return "";
+  const frames = arr(vt.inventory)
+    .filter(i => String(i.uniqueName || "").includes("/Powersuits/") && /Prime/i.test(i.item || ""))
+    .map(i => clean(i.item));
+  const uniqueFrames = [...new Set(frames)];
+  if(uniqueFrames.length){
+    if(uniqueFrames.length === 2){
+      return `${uniqueFrames[0].replace(/\s+Prime$/i, "")} & ${uniqueFrames[1]}`;
+    }
+    return uniqueFrames.join(" & ");
+  }
+  const curExpMs = new Date(vt.expiry).getTime();
+  const activeSched = arr(vt.schedule).find(s =>
+    s.item && Math.abs(new Date(s.expiry).getTime() - curExpMs) < 3600000
+  );
+  return activeSched?.item ? formatVaultPair(activeSched.item) : "Active Rotation";
+}
+
+function renderTopCards(w){
+  // 1. Darvo's Deal
+  const d = arr(w.dailyDeals)[0];
+  if(d){
+    const total = Number(d.total) || 0;
+    const sold = Number(d.sold) || 0;
+    const stockLeft = total ? Math.max(0, total - sold) : null;
+    const pricePart = d.salePrice != null ? `${d.salePrice} Pt` : "";
+    const origPart = d.originalPrice != null ? ` (was ${d.originalPrice})` : "";
+    const stockPart = stockLeft != null ? ` · ${stockLeft}/${total}` : "";
+    const timePart = left(d.expiry) ? ` · ${left(d.expiry).replace(" remaining", "")}` : "";
+    $("darvoItem").textContent = clean(d.item || d.originalItem || "Daily Deal");
+    $("darvoDetail").textContent = `${pricePart}${origPart}${stockPart}${timePart}`.replace(/^ · /, "");
+    $("darvoPill").textContent = d.discount != null ? `-${d.discount}%` : "DEAL";
+  } else {
+    $("darvoItem").textContent = "No active Darvo deal";
+    $("darvoDetail").textContent = "Check Relay Market later";
+    $("darvoPill").textContent = "--";
+  }
+
+  // 2. Prime Resurgence (Violet theme)
+  const vt = w.vaultTrader;
+  if(vt){
+    const activePrimes = getResurgencePrimes(vt);
+    const curTime = left(vt.expiry);
+    $("resurgenceMain").textContent = activePrimes;
+    $("resurgenceDetail").textContent = [vt.location || "Maroo's Bazaar", curTime].filter(Boolean).join(" · ");
+    $("resurgencePill").textContent = curTime ? curTime.replace(" remaining", "") : "ACTIVE";
+  } else {
+    $("resurgenceMain").textContent = "Varzia Unavailable";
+    $("resurgenceDetail").textContent = "Maroo's Bazaar";
+    $("resurgencePill").textContent = "--";
+  }
+
+  // 3. Archon Hunt (near Prime Resurgence)
+  const ah = w.archonHunt;
+  if(ah && !ah.expired){
+    const boss = clean(ah.boss || "Archon Hunt");
+    const faction = clean(ah.faction || "Narmer");
+    const missionSeq = arr(ah.missions).map(m => clean(m.type || m.missionType)).filter(Boolean).join(" → ");
+    const firstNode = arr(ah.missions)[0]?.node || "";
+    const rem = left(ah.expiry).replace(" remaining", "");
+    $("archonMain").textContent = `${boss} · ${faction}`;
+    $("archonDetail").textContent = missionSeq || firstNode || "Weekly Archon Sortie";
+    $("archonPill").textContent = rem || "ACTIVE";
+  } else {
+    $("archonMain").textContent = "Archon Hunt Unavailable";
+    $("archonDetail").textContent = "Awaiting weekly reset";
+    $("archonPill").textContent = "--";
+  }
+
+  // 4. World Events
+  const events = arr(w.events).filter(x => !x.expired);
+  $("eventsPill").textContent = events.length;
+  if(events.length){
+    const ev = events[0];
+    const extraCount = events.length > 1 ? ` (+${events.length - 1})` : "";
+    const loc = ev.victimNode || ev.node || "";
+    const hp = ev.health != null ? `${Math.round(Number(ev.health))}%` : "";
+    const tLeft = left(ev.expiry).replace(" remaining", "");
+    $("eventsMain").textContent = clean(ev.description || ev.name || "Active Event") + extraCount;
+    $("eventsDetail").textContent = [loc, hp, tLeft].filter(Boolean).join(" · ") || clean(ev.tooltip || "Origin System operation");
+  } else {
+    $("eventsMain").textContent = "No active events";
+    $("eventsDetail").textContent = "Origin System quiet";
+  }
+
+  // 5. World Build
+  $("kBuild").textContent = clean(w.buildLabel || "LIVE").slice(0, 14);
+}
+
+/* ============================================================
+   DYNAMIC LOCATION PLANET ART + SYNCED ROCKETSHIP
+   ============================================================ */
+function detectPlanetKey(location){
+  const loc = String(location || "").toLowerCase();
+  if(loc.includes("earth") || loc.includes("strata")) return "earth";
+  if(loc.includes("mercury") || loc.includes("larunda")) return "mercury";
+  if(loc.includes("saturn") || loc.includes("kronia")) return "saturn";
+  if(loc.includes("pluto") || loc.includes("orcus")) return "pluto";
+  if(loc.includes("mars") || loc.includes("maroo")) return "mars";
+  if(loc.includes("venus") || loc.includes("vesper")) return "venus";
+  return "void";
+}
+
+function getPlanetSVG(key){
+  switch(key){
+    case "earth":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="earthOcean" cx="35%" cy="32%">
+            <stop offset="0%" stop-color="#5cc8ff"/>
+            <stop offset="48%" stop-color="#1966b8"/>
+            <stop offset="85%" stop-color="#0b2e63"/>
+            <stop offset="100%" stop-color="#05132b"/>
+          </radialGradient>
+          <clipPath id="earthClip"><circle cx="32" cy="32" r="22"/></clipPath>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#earthOcean)" stroke="#70d6ff" stroke-width="1.2"/>
+        <g clip-path="url(#earthClip)">
+          <path d="M16 20 C21 16, 28 19, 27 25 C25 29, 29 33, 25 38 C20 40, 14 34, 15 26 Z" fill="#4aa96c" opacity=".88"/>
+          <path d="M35 16 C43 15, 49 22, 46 29 C42 32, 44 39, 39 42 C34 39, 33 32, 36 27 C33 23, 32 19, 35 16 Z" fill="#54b876" opacity=".85"/>
+          <path d="M28 43 C34 42, 40 46, 37 51 C31 53, 25 49, 28 43 Z" fill="#70b86c" opacity=".75"/>
+          <g class="planet-clouds" opacity=".62">
+            <rect x="12" y="21" width="18" height="3.2" rx="1.6" fill="#ffffff"/>
+            <rect x="29" y="30" width="22" height="3" rx="1.5" fill="#ffffff"/>
+            <rect x="17" y="40" width="16" height="2.6" rx="1.3" fill="#e6f7ff"/>
+          </g>
+          <circle cx="38" cy="36" r="22" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="10"/>
+        </g>
+      </svg>`;
+
+    case "mercury":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mercGrad" cx="34%" cy="32%">
+            <stop offset="0%" stop-color="#f2d6b3"/>
+            <stop offset="45%" stop-color="#9c8a7a"/>
+            <stop offset="85%" stop-color="#4e433c"/>
+            <stop offset="100%" stop-color="#221b17"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#mercGrad)" stroke="#ffbe73" stroke-width="1.1"/>
+        <circle cx="24" cy="24" r="3.5" fill="rgba(55,44,38,.55)" stroke="rgba(255,225,185,.28)" stroke-width=".7"/>
+        <circle cx="38" cy="29" r="4.8" fill="rgba(55,44,38,.5)" stroke="rgba(255,225,185,.24)" stroke-width=".7"/>
+        <circle cx="28" cy="40" r="2.8" fill="rgba(55,44,38,.55)" stroke="rgba(255,225,185,.24)" stroke-width=".7"/>
+        <circle cx="40" cy="42" r="2.1" fill="rgba(55,44,38,.5)"/>
+      </svg>`;
+
+    case "saturn":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="satBody" cx="35%" cy="32%">
+            <stop offset="0%" stop-color="#fff0c4"/>
+            <stop offset="45%" stop-color="#d8aa5d"/>
+            <stop offset="85%" stop-color="#855a23"/>
+            <stop offset="100%" stop-color="#382209"/>
+          </radialGradient>
+          <clipPath id="satClip"><circle cx="32" cy="32" r="17"/></clipPath>
+        </defs>
+        <ellipse cx="32" cy="32" rx="30" ry="9" transform="rotate(-18 32 32)" fill="none" stroke="rgba(245,212,135,.55)" stroke-width="5"/>
+        <circle cx="32" cy="32" r="17" fill="url(#satBody)" stroke="#ffe099" stroke-width=".9"/>
+        <g clip-path="url(#satClip)" opacity=".45">
+          <rect x="12" y="22" width="40" height="3" fill="#fff2cc"/>
+          <rect x="12" y="29" width="40" height="4" fill="#9c6827"/>
+          <rect x="12" y="37" width="40" height="3" fill="#f7d88c"/>
+        </g>
+        <path d="M 4 38 A 30 9 -18 0 0 60 26" fill="none" stroke="rgba(255,230,165,.92)" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M 7 37 A 26 7.5 -18 0 0 57 27" fill="none" stroke="rgba(165,120,50,.65)" stroke-width="1.5"/>
+      </svg>`;
+
+    case "pluto":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="plutoGrad" cx="34%" cy="32%">
+            <stop offset="0%" stop-color="#dff2ff"/>
+            <stop offset="45%" stop-color="#87adc9"/>
+            <stop offset="82%" stop-color="#3c5470"/>
+            <stop offset="100%" stop-color="#182436"/>
+          </radialGradient>
+          <clipPath id="plutoClip"><circle cx="32" cy="32" r="22"/></clipPath>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#plutoGrad)" stroke="#a8dcff" stroke-width="1.1"/>
+        <g clip-path="url(#plutoClip)">
+          <path d="M24 25 C28 22, 34 25, 34 30 C37 26, 42 29, 39 36 C36 41, 29 42, 24 37 C21 33, 21 28, 24 25 Z" fill="#e6f5ff" opacity=".55"/>
+          <circle cx="20" cy="40" r="4" fill="rgba(30,45,70,.45)"/>
+        </g>
+      </svg>`;
+
+    case "mars":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="marsGrad" cx="35%" cy="32%">
+            <stop offset="0%" stop-color="#ffaa7a"/>
+            <stop offset="50%" stop-color="#c44f2c"/>
+            <stop offset="85%" stop-color="#6b2112"/>
+            <stop offset="100%" stop-color="#2b0b06"/>
+          </radialGradient>
+          <clipPath id="marsClip"><circle cx="32" cy="32" r="22"/></clipPath>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#marsGrad)" stroke="#ff8d63" stroke-width="1.1"/>
+        <g clip-path="url(#marsClip)">
+          <ellipse cx="32" cy="12" rx="10" ry="3.5" fill="#fff5ee" opacity=".7"/>
+          <path d="M18 32 Q30 29 44 35" stroke="rgba(75,20,10,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="25" cy="40" r="3" fill="rgba(75,20,10,.45)"/>
+        </g>
+      </svg>`;
+
+    case "venus":
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="venusGrad" cx="35%" cy="32%">
+            <stop offset="0%" stop-color="#fff4cc"/>
+            <stop offset="50%" stop-color="#e3ad54"/>
+            <stop offset="85%" stop-color="#8c541b"/>
+            <stop offset="100%" stop-color="#361c06"/>
+          </radialGradient>
+          <clipPath id="venusClip"><circle cx="32" cy="32" r="22"/></clipPath>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#venusGrad)" stroke="#ffd685" stroke-width="1.1"/>
+        <g clip-path="url(#venusClip)" class="planet-clouds" opacity=".45">
+          <path d="M10 24 Q32 19 54 25" stroke="#fff9e6" stroke-width="3.5" fill="none"/>
+          <path d="M10 35 Q32 40 54 33" stroke="#ffdf99" stroke-width="3.2" fill="none"/>
+        </g>
+      </svg>`;
+
+    default:
+      return `<svg class="planet-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="voidPlanGrad" cx="35%" cy="32%">
+            <stop offset="0%" stop-color="#ffeaa8"/>
+            <stop offset="45%" stop-color="#cf943a"/>
+            <stop offset="82%" stop-color="#6b4111"/>
+            <stop offset="100%" stop-color="#221202"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#voidPlanGrad)" stroke="#ffd700" stroke-width="1.2"/>
+        <ellipse cx="32" cy="32" rx="28" ry="8" transform="rotate(-16 32 32)" fill="none" stroke="rgba(122,245,248,.45)" stroke-width="1.4"/>
+      </svg>`;
+  }
+}
+
+const BARO_TRANSIT_MS = 12 * 24 * 60 * 60 * 1000;
+let activePlanetKey = "";
+
+function updateBaroPlanetArt(location){
+  const key = detectPlanetKey(location);
+  if(key === activePlanetKey) return;
+  activePlanetKey = key;
+  const target = $("baroPlanetArt");
+  if(target) target.innerHTML = getPlanetSVG(key);
+}
+
+function getBaroState(vt, now = Date.now()){
+  if(!vt) return { phase: "unknown", actMs: NaN, expMs: NaN };
+  const actMs = new Date(vt.activation).getTime();
+  const expMs = new Date(vt.expiry).getTime();
+  const hasTimes = Number.isFinite(actMs) && Number.isFinite(expMs);
+
+  if(vt.active === true || (hasTimes && now >= actMs && now < expMs)){
+    return { phase: "landed", actMs, expMs };
+  }
+  if(Number.isFinite(actMs) && now < actMs){
+    return { phase: "approaching", actMs, expMs };
+  }
+  return { phase: "leaving", actMs, expMs };
+}
+
+function updateBaroShip(w){
+  const rocket = $("baroRocket");
+  const stage = $("orbitStage");
+  const chip = $("baroStateChip");
+  if(!rocket || !stage || !w || !w.voidTrader) return;
+
+  const vt = w.voidTrader;
+  const now = Date.now();
+  const { phase, actMs, expMs } = getBaroState(vt, now);
+
+  updateBaroPlanetArt(vt.location);
+
+  if(phase === "landed"){
+    stage.classList.add("is-landed");
+    rocket.classList.add("is-landed");
+    rocket.style.opacity = 1;
+    rocket.style.transform = `translate3d(213px, -23px, 0) rotate(0deg) scale(0.68)`;
+    if(chip){
+      chip.textContent = "LANDED";
+      chip.className = "baro-status-chip landed";
+    }
+    return;
+  }
+
+  stage.classList.remove("is-landed");
+  rocket.classList.remove("is-landed");
+
+  if(phase === "approaching"){
+    const startMs = actMs - BARO_TRANSIT_MS;
+    const progress = Math.max(0, Math.min(1, (now - startMs) / BARO_TRANSIT_MS));
+    const x = 4 + progress * 162;
+    const hoverY = Math.sin(now / 520) * (1.8 + progress * 1.6);
+    const scale = 0.96 - 0.14 * progress;
+    rocket.style.opacity = 1;
+    rocket.style.transform = `translate3d(${x}px, ${hoverY}px, 0) rotate(90deg) scale(${scale})`;
+    if(chip){
+      chip.textContent = "EN ROUTE";
+      chip.className = "baro-status-chip";
+    }
+    return;
+  }
+
+  const elapsedLeave = Number.isFinite(expMs) ? Math.max(0, now - expMs) : 0;
+  const leaveCycle = Math.min(1, (elapsedLeave % 9000) / 5500);
+  const x = 213 + leaveCycle * 90;
+  const y = -23 - leaveCycle * 26;
+  const tilt = 15 + leaveCycle * 55;
+  const fade = elapsedLeave > 12000 ? 0.15 : Math.max(0, 1 - leaveCycle * 1.15);
+  rocket.style.opacity = fade;
+  rocket.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${tilt}deg) scale(${0.68 - leaveCycle * 0.2})`;
+  if(chip){
+    chip.textContent = "DEPARTED";
+    chip.className = "baro-status-chip leaving";
+  }
+}
+
+let baroWorld = null;
+function animateBaroShip(){
+  if(baroWorld) updateBaroShip(baroWorld);
+  requestAnimationFrame(animateBaroShip);
+}
+requestAnimationFrame(animateBaroShip);
+
+function render(w){
+  baroWorld = w;
+
+  renderTopCards(w);
+  renderBroadcastNews(w);
+
+  // 01 / ALERTS (fixed: active filtering + level/faction/node clarity)
+  const now = Date.now();
+  const alerts = arr(w.alerts).filter(x => !x.expired && (!x.expiry || new Date(x.expiry).getTime() > now));
+  setlist("alerts", alerts.map(x => {
+    const m = x.mission || {};
+    const title = `${m.description || m.type || "Alert"} · ${node(x)}`;
+    const lvl = (m.minEnemyLevel != null && m.maxEnemyLevel != null) ? `Lv ${m.minEnemyLevel}-${m.maxEnemyLevel}` : "";
+    const detail = [m.type || "Mission", m.faction, lvl, left(x.expiry)].filter(Boolean).join(" · ");
+    return row(title, detail, reward(m) || reward(x) || "Mission Reward");
+  }), "No active alerts.");
+
+  // 02 / VOID FISSURES (NORMAL) · 03 / VOID FISSURES (STEEL PATH) · 04 / VOID STORMS (RAILJACK)
+  const fiss = arr(w.fissures).filter(x => x.active !== false && (!x.expiry || new Date(x.expiry).getTime() > now));
+  const sortByTier = (a, b) => (Number(a.tierNum) || 99) - (Number(b.tierNum) || 99);
+
+  const normalFiss = fiss.filter(x => !x.isHard && !x.isStorm).sort(sortByTier);
+  const steelFiss  = fiss.filter(x => x.isHard && !x.isStorm).sort(sortByTier);
+  const stormFiss  = fiss.filter(x => x.isStorm).sort(sortByTier);
+
+  const normalRows = normalFiss.map(x =>
+    row(`${x.tier || "Void"} · ${x.missionType || x.mission || "Fissure"}`,
+        `${node(x)} · ${x.enemy || "Faction"} · ${left(x.expiry)}`,
+        "Normal Relic Fissure")
+  );
+  buildScrollTrack($("fissuresNormalTrack"), normalRows, "No active normal fissures.");
+
+  const steelRows = steelFiss.map(x =>
+    row(`${x.tier || "Void"} · ${x.missionType || x.mission || "Fissure"}`,
+        `${node(x)} · ${x.enemy || "Faction"} · ${left(x.expiry)}`,
+        "Steel Path Relic Fissure")
+  );
+  buildScrollTrack($("fissuresSteelTrack"), steelRows, "No active Steel Path fissures.");
+
+  const stormRows = stormFiss.map(x =>
+    row(`${x.tier || "Void"} · ${x.missionType || x.mission || "Skirmish"}`,
+        `${node(x)} · ${x.enemy || "Faction"} · ${left(x.expiry)}`,
+        x.isHard ? "STEEL PATH · VOID STORM" : "Railjack Void Storm")
+  );
+  buildScrollTrack($("voidStormsTrack"), stormRows, "No active Void Storms.");
+
+  // 05 / DAILY SORTIE
+  const s = w.sortie;
+  setlist("sortie", arr(s?.variants).map((x,i) =>
+    row(`${i+1}. ${x.missionType || x.type || "Mission"}`,
+        `${x.node || ""}${x.modifier ? " · "+x.modifier : ""}`)
+  ), s ? "Sortie missions not listed." : "Sortie data unavailable.");
+
+  // 06 / INVASIONS
+  const inv = arr(w.invasions).filter(x => !x.completed);
+  const invRows = inv.map(x =>
+    row(node(x),
+        `${x.desc || x.attacker?.faction || "Attacker"} vs ${x.defender?.faction || "Defender"} · ${Math.round(Number(x.completion)||0)}%`,
+        `${factionReward(x.attacker)} / ${factionReward(x.defender)}`)
+  );
+  buildScrollTrack($("invasionsTrack"), invRows, "No active invasions.");
+
+  // 07 / ARBITRATION
+  renderArbitration(w);
+
+  // 08 / ARCHIMEDEA (Deep & Temporal)
+  renderArchimedea(w);
+
+  // 09 / WORLD CYCLES (self-advancing live cycle state)
+  renderCycles(w);
+}
+
+function updateCountdowns(w){
+  const baroTop = $("baroTopTimer");
+  const baroLoc = $("baroLoc");
+  if(baroTop && w && w.voidTrader){
+    const vt = w.voidTrader;
+    const now = Date.now();
+    const { phase, actMs, expMs } = getBaroState(vt, now);
+    if(baroLoc) baroLoc.innerHTML = `Location: <strong>${esc(vt.location || "Relay")}</strong>`;
+
+    if(phase === "landed"){
+      const diff = expMs - now;
+      if(diff > 0){
+        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000);
+        baroTop.textContent = d ? `HERE · ${d}d ${h}h ${m}m left` : `HERE · ${h}h ${m}m left`;
+      } else {
+        baroTop.textContent = "Departing now";
+      }
+    } else if(phase === "approaching"){
+      const diff = actMs - now;
+      const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000);
+      baroTop.textContent = d ? `Arrives in ${d}d ${h}h ${m}m` : (h ? `Arrives in ${h}h ${m}m` : `Arrives in ${m}m`);
+    } else {
+      baroTop.textContent = "Departed · Next soon";
+    }
+  } else if(baroTop){
+    baroTop.textContent = "Awaiting data…";
+  }
+}
+
+async function getJSON(url){
+  const r = await fetch(url, {cache:"no-store"});
+  if(!r.ok) throw Error("HTTP "+r.status+" "+url);
+  return r.json();
+}
+
+let currentWorld = null;
+async function update(){
+  const errors = [];
+  const [worldResult, arbResult] = await Promise.allSettled([
+    getJSON(BASE),
+    loadArbitrationData()
+  ]);
+
+  let w = null;
+  if (worldResult.status === "fulfilled") {
+    w = worldResult.value;
+    currentWorld = w;
+  } else {
+    errors.push("WORLDSTATE");
+  }
+
+  if (!isValidWorldArbitration(w?.arbitration) && arbResult.status === "rejected") {
+    errors.push("ARBITRATION");
+  }
+
+  if (w) {
+    render(w);
+    updateCountdowns(w);
+  } else if (arbResult.status === "fulfilled") {
+    renderArbitration(currentWorld);
+  }
+
+  $("warning").textContent = errors.length
+    ? "DATA LINK DEGRADED · " + errors.join(" + ") + " · RETRYING"
+    : "";
+}
+
+let remaining = 60;
+function tick(){
+  remaining = remaining <= 1 ? 60 : remaining - 1;
+  const el = $("countdown");
+  if(el) el.textContent = remaining;
+}
+tick();
+setInterval(tick, 1000);
+
+window.addEventListener("resize", () => { if(baroWorld) updateBaroShip(baroWorld); });
+
+update();
+setInterval(update, INTERVAL);
+setInterval(() => {
+  if(currentWorld){
+    updateCountdowns(currentWorld);
+    renderTopCards(currentWorld);
+    renderCycles(currentWorld);
+  }
+  renderArbitration(currentWorld);
+}, 30000);
+</script>
+</body>
+</html>
