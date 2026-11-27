@@ -1,21 +1,20 @@
 # 🚀 Warframe Live Dashboard
 
 <p align="center">
-  **A little heads-up for every Tenno.**
-  <br>
+  <strong>A little heads-up for every Tenno.</strong><br>
   Stay updated on what's happening across the Origin System.
 </p>
 
 <p align="center">
   <a href="https://axztan.github.io/Warframe-Live-Dashboard/">
-    🌐 **OPEN LIVE DASHBOARD**
+    🌐 <strong>OPEN LIVE DASHBOARD</strong>
   </a>
 </p>
 
 <p align="center">
-  ![Game](https://img.shields.io/badge/Game-Warframe-orange?style=for-the-badge)
-  ![Hosting](https://img.shields.io/badge/Hosted%20on-GitHub%20Pages-181717?style=for-the-badge&logo=github)
-  ![Project](https://img.shields.io/badge/Project-Unofficial-blueviolet?style=for-the-badge)
+  <img src="https://img.shields.io/badge/Game-Warframe-orange?style=for-the-badge" alt="Warframe">
+  <img src="https://img.shields.io/badge/Hosting-GitHub%20Pages-181717?style=for-the-badge&logo=github" alt="GitHub Pages">
+  <img src="https://img.shields.io/badge/Project-Unofficial-blueviolet?style=for-the-badge" alt="Unofficial Project">
 </p>
 
 ---
